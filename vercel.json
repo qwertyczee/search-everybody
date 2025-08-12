@@ -10,11 +10,6 @@
       { "src": "/start", "dest": "/index.js" },
       { "src": "/events/(.*)", "dest": "/index.js" },
       { "src": "/results/(.*)", "dest": "/index.js" }
-    ],
-    "functions": {
-      "index.js": {
-        "maxDuration": 900
-      }
-    }
+    ]
   }
   
