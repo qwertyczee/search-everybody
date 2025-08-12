@@ -1,7 +1,7 @@
 // crawler.js
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-const PQueue = require('p-queue').default;
+const PQueue = (await import('p-queue')).default;
 const { URL } = require('url');
 
 let playwright = null;
