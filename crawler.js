@@ -1,7 +1,10 @@
 // crawler.js
 const fetch = require('node-fetch');
 const cheerio = require('cheerio');
-const PQueue = (await import('p-queue')).default;
+let PQueue;
+(async () => {
+  PQueue = (await import('p-queue')).default;
+})();
 const { URL } = require('url');
 
 let playwright = null;
@@ -26,7 +29,7 @@ async function crawlerForDomains(options) {
     onFoundImage = () => {}
   } = options;
 
-  const queue = new PQueue({ concurrency });
+  const queue = new (PQueue)({ concurrency });
 
   onEvent({ type: 'info', message: `Crawl start: concurrency=${concurrency}, maxPagesPerDomain=${maxPagesPerDomain}, maxDepth=${maxDepth}` });
 
