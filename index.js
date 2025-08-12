@@ -65,16 +65,11 @@ app.get('/start', async (req, res) => {
       // Ensure absolute URL for fetch
       let fetchUrl = source;
       try {
-        // If it's not an absolute URL, try to make it one
+        // If it's not an absolute URL, try to prepend http://
         new URL(source);
       } catch {
-        // Assume it's a file path or relative, prepend file:// or http:// as needed
-        if (/^[\w.-]+(\.[\w.-]+)+/.test(source)) {
-          // Looks like a domain name
-          fetchUrl = `http://${source}`;
-        } else {
-          throw new Error(`Invalid or unsupported source URL: ${source}`);
-        }
+        // No protocol: prepend http://
+        fetchUrl = `http://${source}`;
       }
       const r = await fetch(fetchUrl);
       if (!r.ok) {

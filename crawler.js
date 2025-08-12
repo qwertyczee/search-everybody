@@ -71,11 +71,8 @@ async function crawlerForDomains(options) {
         try {
           new URL(url);
         } catch {
-          if (/^[\w.-]+(\.[\w.-]+)+/.test(url)) {
-            fetchUrl = `http://${url}`;
-          } else {
-            throw new Error(`Invalid or unsupported crawl URL: ${url}`);
-          }
+          // No protocol: prepend http://
+          fetchUrl = `http://${url}`;
         }
         const r = await fetch(fetchUrl, { redirect: 'follow', timeout: 10000 });
         const ct = r.headers.get('content-type') || '';
