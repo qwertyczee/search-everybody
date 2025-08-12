@@ -1,20 +1,14 @@
 {
     "version": 2,
+    "buildCommand": "echo 'Build Command'",
     "builds": [
       {
         "src": "index.js",
         "use": "@vercel/node"
       }
     ],
-    "routes": [
-      { "src": "/start", "dest": "/index.js" },
-      { "src": "/events/(.*)", "dest": "/index.js" },
-      { "src": "/results/(.*)", "dest": "/index.js" }
-    ],
-    "functions": {
-      "index.js": {
-        "maxDuration": 900
-      }
-    }
+    "rewrites": [
+        { "source": "/(.*)", "destination": "/index.js" }
+    ]
   }
   
