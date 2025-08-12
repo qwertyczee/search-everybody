@@ -1,5 +1,5 @@
 // crawler.js
-const fetch = require('node-fetch');
+const axios = require('axios');
 const cheerio = require('cheerio');
 const PQueue = require('p-queue').default;
 const { URL } = require('url');
@@ -68,18 +68,20 @@ async function crawlerForDomains(options) {
         try {
           new URL(url);
         } catch {
-          // No protocol: prepend http://
           fetchUrl = `http://${url}`;
         }
-        const r = await fetch(fetchUrl, { redirect: 'follow', timeout: 10000 });
-        const ct = r.headers.get('content-type') || '';
-        if (!r.ok) {
-          onEvent({ type: 'warn', message: `(${host}) ${url} -> HTTP ${r.status}` });
+        const response = await axios.get(fetchUrl, {
+          maxRedirects: 5,
+          timeout: 10000,
+          validateStatus: () => true
+        });
+        const ct = response.headers['content-type'] || '';
+        if (response.status < 200 || response.status >= 300) {
+          onEvent({ type: 'warn', message: `(${host}) ${url} -> HTTP ${response.status}` });
         }
         if (ct.includes('text/html')) {
-          html = await r.text();
+          html = response.data;
         } else {
-          // not HTML: skip
           html = null;
         }
       } catch (e) {
