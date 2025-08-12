@@ -1,0 +1,19 @@
+{
+    "name": "vercel-crawler",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "dependencies": {
+      "express": "^4.18.2",
+      "node-fetch": "^2.6.7",
+      "cheerio": "^1.0.0-rc.12",
+      "p-queue": "^7.3.0",
+      "uuid": "^9.0.0"
+    },
+    "optionalDependencies": {
+      "playwright": "^1.44.0"
+    }
+  }
+  
