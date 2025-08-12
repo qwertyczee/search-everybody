@@ -62,7 +62,21 @@ app.get('/start', async (req, res) => {
   (async () => {
     try {
       sendEvent(jobId, { type: 'info', message: 'Stahuji seznam domén...' });
-      const r = await fetch(source);
+      // Ensure absolute URL for fetch
+      let fetchUrl = source;
+      try {
+        // If it's not an absolute URL, try to make it one
+        new URL(source);
+      } catch {
+        // Assume it's a file path or relative, prepend file:// or http:// as needed
+        if (/^[\w.-]+(\.[\w.-]+)+/.test(source)) {
+          // Looks like a domain name
+          fetchUrl = `http://${source}`;
+        } else {
+          throw new Error(`Invalid or unsupported source URL: ${source}`);
+        }
+      }
+      const r = await fetch(fetchUrl);
       if (!r.ok) {
         sendEvent(jobId, { type: 'error', message: `Chyba při stahování source: ${r.status}` });
         JOBS[jobId].status = 'failed';
