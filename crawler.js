@@ -67,7 +67,17 @@ async function crawlerForDomains(options) {
 
       let html = null;
       try {
-        const r = await fetch(url, { redirect: 'follow', timeout: 10000 });
+        let fetchUrl = url;
+        try {
+          new URL(url);
+        } catch {
+          if (/^[\w.-]+(\.[\w.-]+)+/.test(url)) {
+            fetchUrl = `http://${url}`;
+          } else {
+            throw new Error(`Invalid or unsupported crawl URL: ${url}`);
+          }
+        }
+        const r = await fetch(fetchUrl, { redirect: 'follow', timeout: 10000 });
         const ct = r.headers.get('content-type') || '';
         if (!r.ok) {
           onEvent({ type: 'warn', message: `(${host}) ${url} -> HTTP ${r.status}` });
